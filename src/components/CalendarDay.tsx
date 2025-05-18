@@ -16,14 +16,48 @@ const CalendarDay: React.FC<CalendarDayProps> = ({ day, showDateBefore = false }
   const isToday = day.isToday;
   
   const handleCopyHebrewDate = () => {
-    navigator.clipboard.writeText(day.fullHebrewDate);
-    showToast('התאריך העברי הועתק');
-  };
+  const text = day.fullHebrewDate;
+  const tempInput = document.createElement('input');
+  tempInput.value = text;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+
+  try {
+    const success = document.execCommand('copy');
+    if (success) {
+      showToast('התאריך העברי הועתק');
+    } else {
+      showToast('העתקה נכשלה');
+    }
+  } catch (err) {
+    showToast('שגיאה בהעתקה');
+  }
+
+  document.body.removeChild(tempInput);
+};
+
   
   const handleCopyGregorianDate = () => {
-    navigator.clipboard.writeText(formatGregorianDate(day.gregorianDate));
-    showToast('התאריך הלועזי הועתק');
-  };
+  const text = formatGregorianDate(day.gregorianDate);
+  const tempInput = document.createElement('input');
+  tempInput.value = text;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+
+  try {
+    const success = document.execCommand('copy');
+    if (success) {
+      showToast('התאריך הלועזי הועתק');
+    } else {
+      showToast('העתקה נכשלה');
+    }
+  } catch (err) {
+    showToast('שגיאה בהעתקה');
+  }
+
+  document.body.removeChild(tempInput);
+};
+
   
   // For empty cells at the beginning of the calendar
   if (!day.hebrewDay) {
